@@ -24,7 +24,7 @@ if st.button("Send", key="access_chat_send"):
 
         # Call OpenAI
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4.1",
             messages=st.session_state.access_chat_history
         )
 
