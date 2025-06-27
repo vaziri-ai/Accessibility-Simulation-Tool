@@ -115,7 +115,7 @@ user_input = st.text_input("Ask a follow-up question:", key="user_input")
 # Send question
 if st.button("Send"):
     if user_input:       
-        if selected_rule_title and selected_rule_title != "":  # Add context from rule
+        if selected_rule_title and rule_description != "":  # Add context from rule
             context = f"""
         The user is asking a follow-up question based on this WCAG rule:
         
