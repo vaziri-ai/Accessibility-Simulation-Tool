@@ -71,11 +71,6 @@ Avoid jargon, and speak as if guiding a non-technical healthcare staff member us
     )
     return response.output_text
 
-result = generate_why_this_matters("Language of Parts", "Declare language changes within content.", "non-native language speakers")
-print(result)
-
-print(result)
-
 import streamlit as st
 
 st.title("🧠 Why This Matters (Accessibility Explainer)")
