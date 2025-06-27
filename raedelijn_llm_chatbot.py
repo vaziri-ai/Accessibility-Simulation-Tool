@@ -106,7 +106,7 @@ st.subheader("💬 Ask More Questions")
 # Keep track of chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [
-        {"role": "system", "content": "You are an accessibility assistant helping explain accessibility barriers to non-technical healthcare professionals."}
+        {"role": "system", "content": "You are an accessibility assistant for non-technical healthcare teams. Help explain WCAG rules clearly and give short, working code examples (e.g. HTML, CSS, ARIA, JS) to fix the problem. Be gentle and helpful."}
     ]
 
 # User input box
@@ -114,13 +114,22 @@ user_input = st.text_input("Ask a follow-up question:", key="user_input")
 
 # Send question
 if st.button("Send"):
-    if user_input:
-        # Add user message to history
-        st.session_state.chat_history.append({"role": "user", "content": user_input})
-
+    if user_input:       
+        if selected_rule_title and selected_rule_title != "":  # Add context from rule
+            context = f"""
+        The user is asking a follow-up question based on this WCAG rule:
+        
+        Rule Title: {selected_rule_title}
+        Description: {rule_description}
+        
+        Please include a small and simple code example (HTML/CSS/ARIA or JavaScript) that addresses this accessibility rule.
+        """
+            st.session_state.chat_history.append({"role": "user", "content": context + "\n\n" + user_input})
+        else:
+            st.session_state.chat_history.append({"role": "user", "content": user_input})
         # Get LLM response
         response = client.chat.completions.create(
-            model="gpt-4",  # or gpt-3.5-turbo
+            model="gpt-4.1", 
             messages=st.session_state.chat_history
         )
         reply = response.choices[0].message.content
