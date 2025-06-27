@@ -62,14 +62,17 @@ This issue affects {persona}. Please explain why this accessibility issue matter
 Use a helpful, gentle tone. Keep the explanation short, and use a maximum of 3 sentences.
 Avoid jargon, and speak as if guiding a non-technical healthcare staff member using an accessibility simulation tool for the first time.
 """
-    response = client.responses.create(
-        model="gpt-4.1",
-        input=[
+
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[
             {"role": "system", "content": "You are an accessibility assistant helping explain accessibility barriers to non-technical healthcare professionals."},
             {"role": "user", "content": prompt}
-        ],
+        ]
     )
-    return response.output_text
+
+    return response.choices[0].message.content
+
 
 import streamlit as st
 
