@@ -98,3 +98,39 @@ if st.button("Why this Matters?"):
         st.write(explanation)
     else:
         st.write("Could not find the selected rule details.")
+
+# --- Chat with AI Assistant ---
+st.markdown("---")
+st.subheader("💬 Ask More Questions")
+
+# Keep track of chat history
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = [
+        {"role": "system", "content": "You are an accessibility assistant helping explain accessibility barriers to non-technical healthcare professionals."}
+    ]
+
+# User input box
+user_input = st.text_input("Ask a follow-up question:", key="user_input")
+
+# Send question
+if st.button("Send"):
+    if user_input:
+        # Add user message to history
+        st.session_state.chat_history.append({"role": "user", "content": user_input})
+
+        # Get LLM response
+        response = client.chat.completions.create(
+            model="gpt-4",  # or gpt-3.5-turbo
+            messages=st.session_state.chat_history
+        )
+        reply = response.choices[0].message.content
+
+        # Add assistant reply to history
+        st.session_state.chat_history.append({"role": "assistant", "content": reply})
+
+        # Display chat
+        st.markdown("### 👩‍⚕️ AI Assistant Response")
+        st.write(reply)
+    else:
+        st.warning("Please type a question before clicking Send.")
+
