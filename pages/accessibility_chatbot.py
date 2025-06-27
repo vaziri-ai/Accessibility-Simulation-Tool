@@ -1,5 +1,3 @@
-# pages/2_Accessibility_Chatbot.py
-
 import streamlit as st
 from openai import OpenAI
 
@@ -12,32 +10,33 @@ st.markdown("Ask anything about digital accessibility, WCAG rules, or inclusive 
 # Initialize chat history
 if "access_chat_history" not in st.session_state:
     st.session_state.access_chat_history = [
-        {"role": "system", "content": "You are an expert in digital accessibility. You help users understand WCAG rules, inclusive design principles, and practical tips to improve accessibility for people with disabilities. Keep your tone friendly and explain clearly with examples when possible."}
+        {"role": "system", "content": "You are an accessibility assistant. Be friendly and explain accessibility rules and tips clearly with examples when possible."}
     ]
 
-# User input
-user_question = st.text_input("Type your accessibility question here:", key="access_chat_input")
+# Display all messages in sequence
+for msg in st.session_state.access_chat_history[1:]:  # skip system message
+    if msg["role"] == "user":
+        with st.chat_message("user"):
+            st.markdown(msg["content"])
+    elif msg["role"] == "assistant":
+        with st.chat_message("assistant"):
+            st.markdown(msg["content"])
 
-if st.button("Send", key="access_chat_send"):
-    if user_question:
-        st.session_state.access_chat_history.append({"role": "user", "content": user_question})
+# Input at the bottom of the chat
+user_input = st.chat_input("Type your accessibility question...")
 
-        # Call OpenAI
-        response = client.chat.completions.create(
-            model="gpt-4.1",
-            messages=st.session_state.access_chat_history
-        )
+if user_input:
+    # Show user message immediately
+    st.chat_message("user").markdown(user_input)
+    st.session_state.access_chat_history.append({"role": "user", "content": user_input})
 
-        reply = response.choices[0].message.content
-        st.session_state.access_chat_history.append({"role": "assistant", "content": reply})
+    # Generate assistant reply
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=st.session_state.access_chat_history
+    )
+    reply = response.choices[0].message.content
+    st.session_state.access_chat_history.append({"role": "assistant", "content": reply})
 
-        st.markdown("### 🤖 AI Assistant")
-        st.write(reply)
-    else:
-        st.warning("Please enter a question first.")
-
-# Optional: Show chat history (if you want to display the full thread)
-with st.expander("🕘 Chat History"):
-    for msg in st.session_state.access_chat_history[1:]:  # skip system prompt
-        role = "👤 You" if msg["role"] == "user" else "🤖 AI"
-        st.markdown(f"**{role}:** {msg['content']}")
+    # Show assistant message immediately
+    st.chat_message("assistant").markdown(reply)
