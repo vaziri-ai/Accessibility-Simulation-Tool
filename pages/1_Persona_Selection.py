@@ -1,5 +1,5 @@
 import streamlit as st
-from raedelijn_llm_chatbot import generate_why_this_matters, wcag_rules
+from why_this_matters_chatbot import generate_why_this_matters, wcag_rules
 
 st.set_page_config(page_title="Persona Selection", layout="centered")
 
