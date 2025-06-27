@@ -10,7 +10,7 @@ st.markdown("Ask anything about digital accessibility, WCAG rules, or inclusive 
 # Initialize chat history
 if "access_chat_history" not in st.session_state:
     st.session_state.access_chat_history = [
-        {"role": "system", "content": "You are an accessibility assistant. Be friendly and explain accessibility rules and tips clearly with examples when possible."}
+        {"role": "system", "content": "You are an accessibility assistant. Be friendly, use simple examples, and answer in no more than **5 sentences** or **2 short paragraphs** unless asked otherwise."}
     ]
 
 # Display all messages in sequence
