@@ -86,7 +86,7 @@ default_persona = st.session_state.get("selected_persona", personas[0])
 selected_persona = st.selectbox("🧍 Select Persona", personas, index=personas.index(default_persona))
 
 # Generate when button is clicked
-if st.button("Why this Matters?"):
+if st.button("Why this Matters?", key="explain_button"):
     # Find the selected rule dictionary based on the title
     selected_rule = next((rule for rule in wcag_rules if rule["title"] == selected_rule_title), None)
 
@@ -111,10 +111,10 @@ if "chat_history" not in st.session_state:
     ]
 
 # User input box
-user_input = st.text_input("Ask a follow-up question:", key="user_input")
+user_input = st.text_input("Ask a follow-up question:", key="chat_input_box")
 
 # Send question
-if st.button("Send"):
+if st.button("Send", key="chat_send_button"):
     if user_input:       
         if selected_rule_title and selected_rule_title != "":
             rule_description = next((rule["description"] for rule in wcag_rules if rule["title"] == selected_rule_title), "")
