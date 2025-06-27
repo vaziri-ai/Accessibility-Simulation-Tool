@@ -64,7 +64,7 @@ Avoid jargon, and speak as if guiding a non-technical healthcare staff member us
 """
 
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4.1",
         messages=[
             {"role": "system", "content": "You are an accessibility assistant helping explain accessibility barriers to non-technical healthcare professionals."},
             {"role": "user", "content": prompt}
