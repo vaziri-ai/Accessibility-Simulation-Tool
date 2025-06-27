@@ -9,13 +9,7 @@ Original file is located at
 
 from openai import OpenAI
 client = OpenAI(api_key="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")
-
-response = client.responses.create(
-    model="gpt-4.1",
-    input="Why is low contrast a problem for users with cognitive challenges?"
-)
-
-print(response.output_text)
+model="gpt-4.1",
 
 personas = [
     "low literacy",
