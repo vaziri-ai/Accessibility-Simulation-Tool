@@ -59,7 +59,7 @@ selected_persona = query_params.get("persona", "")
 if selected_rule_title and selected_persona:
     st.markdown(f"**Persona:** {selected_persona}<br>**Issue:** {selected_rule_title}", unsafe_allow_html=True)
 
-    selected_rule = next((rule for rule in wcag_rules if rule["title"] == selected_rule_title), None)
+    selected_rule = next((rule for rule in wcag_rules if rule["id"] in rule_param or rule["title"].lower() in rule_param.lower()),None)
     if selected_rule:
         rule_description = selected_rule["description"]
         explanation = generate_why_this_matters(selected_rule_title, rule_description, selected_persona)
