@@ -20,7 +20,12 @@ wcag_rules = [
     {"id": "1.2.2", "title": "Captions (Prerecorded)", "description": "Provide captions for prerecorded audio.", "personas": "non-native language speakers, hearing impairment"},
     {"id": "1.3.1", "title": "Info and Relationships", "description": "Ensure information and relationships can be determined programmatically.", "personas": "low literacy, cognitive load challenges"},
     {"id": "1.3.2", "title": "Meaningful Sequence", "description": "Content must be in a meaningful order.", "personas": "cognitive load challenges, older adults with declining digital skills"},
-    # ... (Add the rest of your rules as needed)
+    {"id": "2.4.6", "title": "Headings and Labels", "description": "Headings and labels must describe topic or purpose.", "personas": "cognitive load"},
+    {"id": "3.2.4", "title": "Consistent Identification", "description": "Components with same function are identified consistently.", "personas": "cognitive load, autism spectrum"},
+    {"id": "2.5.5", "title": "Target Size", "description": "Touch targets should be at least 44 by 44 CSS pixels.", "personas": "visual impairment, motor impairment"},
+    {"id": "2.4.7", "title": "Focus Visible", "description": "Keyboard focus should be clearly visible.", "personas": "motor impairment"},
+    {"id": "3.1.5", "title": "Reading Level", "description": "Use language that requires lower than upper secondary education.", "personas": "low literacy, non-native speakers"},
+
 ]
 
 def generate_why_this_matters(rule_title, rule_description, persona):
