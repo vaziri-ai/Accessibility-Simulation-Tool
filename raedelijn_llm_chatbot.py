@@ -3,6 +3,9 @@ from openai import OpenAI
 
 # Initialize OpenAI
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+query_params = st.query_params
+persona_param = query_params.get("persona", "")
+rule_param = query_params.get("rule", "")
 
 # Define WCAG rules and personas
 personas = [
@@ -50,25 +53,23 @@ Avoid jargon, and speak as if guiding a non-technical healthcare staff member us
 st.set_page_config(page_title="Accessibility Explainer", layout="centered")
 st.title("🧠 Why This Matters")
 
-# Read query parameters
-query_params = st.query_params
-selected_rule_title = query_params.get("rule", "")
-selected_persona = query_params.get("persona", "")
-
 # Show selected values
-if selected_rule_title and selected_persona:
-    st.markdown(f"**Persona:** {selected_persona}<br>**Issue:** {selected_rule_title}", unsafe_allow_html=True)
+if persona_param and rule_param:
+    st.markdown(f"**Persona:** {persona_param}<br>**Issue:** {rule_param}", unsafe_allow_html=True)
 
-    selected_rule = next((rule for rule in wcag_rules if rule["id"] in rule_param or rule["title"].lower() in rule_param.lower()),None)
+    selected_rule = next(
+        (rule for rule in wcag_rules if rule["id"] in rule_param or rule["title"].lower() in rule_param.lower()),
+        None
+    )
+
     if selected_rule:
         rule_description = selected_rule["description"]
-        explanation = generate_why_this_matters(selected_rule_title, rule_description, selected_persona)
+        explanation = generate_why_this_matters(rule_param, rule_description, persona_param)
         st.write("### Why this Matters:")
         st.write(explanation)
     else:
-        st.error("⚠️ WCAG rule not found. Please check the rule parameter in the URL.")
-else:
-    st.warning("Please provide both `persona` and `rule` in the URL query parameters.")
+        st.warning("⚠️ WCAG rule not found. Please check the rule parameter in the URL.")
+
 
 # --- Chat Assistant Section ---
 st.markdown("---")
