@@ -1,13 +1,15 @@
 import streamlit as st
 from openai import OpenAI
 
-# Initialize OpenAI
+# --- Setup OpenAI ---
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# --- Get Query Parameters ---
 query_params = st.query_params
 persona_param = query_params.get("persona", "")
 rule_param = query_params.get("rule", "")
 
-# Define WCAG rules and personas
+# --- Define WCAG rules and personas ---
 personas = [
     "Low Literacy – Age 65+",
     "Cognitive Load",
@@ -28,9 +30,9 @@ wcag_rules = [
     {"id": "2.5.5", "title": "Target Size", "description": "Touch targets should be at least 44 by 44 CSS pixels.", "personas": "visual impairment, motor impairment"},
     {"id": "2.4.7", "title": "Focus Visible", "description": "Keyboard focus should be clearly visible.", "personas": "motor impairment"},
     {"id": "3.1.5", "title": "Reading Level", "description": "Use language that requires lower than upper secondary education.", "personas": "low literacy, non-native speakers"},
-
 ]
 
+# --- LLM Prompt Builder ---
 def generate_why_this_matters(rule_title, rule_description, persona):
     prompt = f"""
 Accessibility Rule: {rule_title}
@@ -49,11 +51,11 @@ Avoid jargon, and speak as if guiding a non-technical healthcare staff member us
     )
     return response.choices[0].message.content
 
-# --- Streamlit App Start ---
+# --- UI Start ---
 st.set_page_config(page_title="Accessibility Explainer", layout="centered")
 st.title("🧠 Why This Matters")
 
-# Show selected values
+# --- Explanation Block ---
 if persona_param and rule_param:
     st.markdown(f"**Persona:** {persona_param}<br>**Issue:** {rule_param}", unsafe_allow_html=True)
 
@@ -64,12 +66,14 @@ if persona_param and rule_param:
 
     if selected_rule:
         rule_description = selected_rule["description"]
-        explanation = generate_why_this_matters(rule_param, rule_description, persona_param)
+        rule_title = selected_rule["title"]
+        explanation = generate_why_this_matters(rule_title, rule_description, persona_param)
         st.write("### Why this Matters:")
         st.write(explanation)
     else:
         st.warning("⚠️ WCAG rule not found. Please check the rule parameter in the URL.")
-
+else:
+    st.warning("Missing query parameters: `persona` or `rule`.")
 
 # --- Chat Assistant Section ---
 st.markdown("---")
@@ -83,16 +87,14 @@ if "chat_history" not in st.session_state:
 user_input = st.text_input("Type your question here:")
 
 if st.button("Send") and user_input:
-    # Add context if available
     context = ""
-    if selected_rule_title:
-        rule_description = next((rule["description"] for rule in wcag_rules if rule["title"] == selected_rule_title), "")
+    if selected_rule:
         context = f"""
 The user is asking a follow-up question based on this WCAG rule:
 
-Persona: {selected_persona}
-Rule Title: {selected_rule_title}
-Description: {rule_description}
+Persona: {persona_param}
+Rule Title: {selected_rule['title']}
+Description: {selected_rule['description']}
 
 Please include a small and simple code example (HTML/CSS/ARIA or JavaScript) that addresses this accessibility rule.
 """
