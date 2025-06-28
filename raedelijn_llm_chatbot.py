@@ -6,12 +6,12 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Define WCAG rules and personas
 personas = [
-    "low literacy",
-    "cognitive load challenges",
-    "visual impairment",
-    "motor impairment",
-    "older adults with declining digital skills",
-    "non-native language speakers"
+    "Low Literacy – Age 65+",
+    "Cognitive Load",
+    "Visual Impairment",
+    "Autism Spectrum",
+    "Motor Impairment",
+    "Non-Native Speakers"
 ]
 
 wcag_rules = [
